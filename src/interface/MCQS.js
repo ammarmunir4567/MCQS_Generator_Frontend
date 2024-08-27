@@ -2,20 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 
 function App() {
   const [mcqs, setMcqs] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [answers, setAnswers] = useState({});
   const [marks, setMarks] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [allAnswered, setAllAnswered] = useState(false);
-  const [quizType, setQuizType] = useState(""); // State for quiz type
-  const [showModal, setShowModal] = useState(true); // State to show modal
-  const [inputValue, setInputValue] = useState(""); // State for input field
-  const [highlightedAnswers, setHighlightedAnswers] = useState({}); // State for highlighting correct answers
-  const resultsRef = useRef(null); // Reference to the results container
+  const [quizType, setQuizType] = useState("");
+  const [showModal, setShowModal] = useState(true);
+  const [inputValue, setInputValue] = useState("");
+  const [highlightedAnswers, setHighlightedAnswers] = useState({});
+  const resultsRef = useRef(null);
 
   useEffect(() => {
     if (quizType) {
+      setLoading(true);
       fetch('https://mcqs-generator.vercel.app/generate', {
         method: 'POST',
         headers: {
@@ -27,6 +29,7 @@ function App() {
       .then(data => {
         setMcqs(data.mcqs);
         setTotalQuestions(data.mcqs.length);
+        setLoading(false);
       });
     }
   }, [quizType]);
@@ -53,19 +56,18 @@ function App() {
     mcqs.forEach((mcq, index) => {
       if (answers[index] === mcq.answer[0]) {
         correct++;
-        correctAnswersMap[index] = true; // Mark this question as having the correct answer selected
+        correctAnswersMap[index] = true;
       } else {
-        correctAnswersMap[index] = false; // Mark this question as having the wrong answer
+        correctAnswersMap[index] = false;
       }
     });
 
     const computedMarks = ((correct / mcqs.length) * 100).toFixed(1);
     setMarks(computedMarks);
     setCorrectAnswers(correct);
-    setHighlightedAnswers(correctAnswersMap); // Set the highlight state
+    setHighlightedAnswers(correctAnswersMap);
     setSubmitted(true);
 
-    // Scroll to the results container
     if (resultsRef.current) {
       resultsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -78,14 +80,41 @@ function App() {
   const handleSubmit = () => {
     if (inputValue.trim()) {
       setQuizType(inputValue.trim());
-      setShowModal(false); // Close modal after submission
+      setShowModal(false);
     } else {
       alert('Please enter a quiz type.');
     }
   };
 
+  const resetQuiz = () => {
+    // Reset all states to initial values
+    setMcqs([]);
+    setLoading(false);
+    setAnswers({});
+    setMarks(0);
+    setTotalQuestions(0);
+    setCorrectAnswers(0);
+    setSubmitted(false);
+    setAllAnswered(false);
+    setQuizType("");
+    setShowModal(true);
+    setInputValue("");
+    setHighlightedAnswers({});
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-teal-400 via-cyan-500 to-blue-500">
+      {/* Loading Screen */}
+      {loading && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
+          <div className="flex flex-col items-center">
+            {/* Circular Loader */}
+            <div className="w-16 h-16 border-4 border-t-4 border-t-transparent border-white rounded-full animate-spin"></div>
+            <p className="text-white mt-4 text-lg font-semibold">Loading...</p>
+          </div>
+        </div>
+      )}
+
       {/* Modal for quiz type input */}
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
@@ -114,6 +143,12 @@ function App() {
           <h1 className="text-2xl font-bold text-gray-800">MCQS Generator</h1>
           <div className="flex space-x-4">
             <button
+              onClick={resetQuiz}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
+            <button
               onClick={checkAnswers}
               className={`px-4 py-2 ${allAnswered ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} text-white font-semibold rounded-lg transition-colors`}
               disabled={!allAnswered}
@@ -128,6 +163,20 @@ function App() {
       <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="w-full max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-8 text-center text-white">MCQ Test</h1>
+
+          {/* Display Results at the Top */}
+          {submitted && (
+            <div
+              ref={resultsRef}
+              className="mb-8 p-6 bg-white rounded-lg shadow-md text-center"
+            >
+              <p className="text-2xl font-bold text-green-600">Results:</p>
+              <p className="text-lg mt-2">Total Questions: {totalQuestions}</p>
+              <p className="text-lg">Correct Answers: {correctAnswers}</p>
+              <p className="text-lg">Marks: {marks}%</p>
+            </div>
+          )}
+
           {mcqs.map((mcq, index) => (
             <div
               key={index}
@@ -144,7 +193,7 @@ function App() {
                       checked={answers[index] === key}
                       onChange={(e) => handleChange(e, index)}
                       className="mr-2"
-                      disabled={submitted} // Disable inputs after submission
+                      disabled={submitted}
                     />
                     <span className={`text-gray-700 ${submitted && key === mcq.answer[0] ? 'font-bold text-green-600' : ''}`}>{key}. {value}</span>
                   </label>
@@ -152,19 +201,6 @@ function App() {
               </div>
             </div>
           ))}
-
-          {/* Display Results */}
-          {submitted && (
-            <div
-              ref={resultsRef}
-              className="mt-8 p-6 bg-white rounded-lg shadow-md text-center"
-            >
-              <p className="text-2xl font-bold text-green-600">Results:</p>
-              <p className="text-lg mt-2">Total Questions: {totalQuestions}</p>
-              <p className="text-lg">Correct Answers: {correctAnswers}</p>
-              <p className="text-lg">Marks: {marks}%</p>
-            </div>
-          )}
         </div>
       </main>
 
