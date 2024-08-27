@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import logo from './logo.png'
 function App() {
   const [mcqs, setMcqs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -108,7 +108,6 @@ function App() {
       {loading && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
           <div className="flex flex-col items-center">
-            {/* Circular Loader */}
             <div className="w-16 h-16 border-4 border-t-4 border-t-transparent border-white rounded-full animate-spin"></div>
             <p className="text-white mt-4 text-lg font-semibold">Loading...</p>
           </div>
@@ -138,31 +137,37 @@ function App() {
       )}
 
       {/* Header */}
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">MCQS Generator</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={resetQuiz}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
-            >
-              Try Again
-            </button>
-            <button
-              onClick={checkAnswers}
-              className={`px-4 py-2 ${allAnswered ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} text-white font-semibold rounded-lg transition-colors`}
-              disabled={!allAnswered}
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </header>
+   {/* Header */}
+<header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+  <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <div className="flex items-center space-x-3">
+      {/* Logo Image */}
+      <img src={logo} alt="Logo" className="h-10 w-10" />
+      <h1 className="text-2xl font-bold text-gray-800">Quiz Generator</h1>
+    </div>
+    <div className="flex space-x-4">
+      <button
+        onClick={resetQuiz}
+        className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-colors"
+      >
+        Try Again
+      </button>
+      <button
+        onClick={checkAnswers}
+        className={`px-4 py-2 ${allAnswered ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'} text-white font-semibold rounded-lg transition-colors`}
+        disabled={!allAnswered}
+      >
+        Submit
+      </button>
+    </div>
+  </div>
+</header>
+
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8 flex-grow">
         <div className="w-full max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-center text-white">MCQ Test</h1>
+          <h1 className="text-4xl font-bold mb-8 text-center text-white">Quiz Test</h1>
 
           {/* Display Results at the Top */}
           {submitted && (
@@ -207,11 +212,12 @@ function App() {
       {/* Footer */}
       <footer className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-600">© 2024 MCQS Generator Platform. All rights reserved.</p>
+          <p className="text-gray-600">© 2024 Quiz Generator Platform. All rights reserved.</p>
         </div>
       </footer>
     </div>
   );
 }
+
 
 export default App;
