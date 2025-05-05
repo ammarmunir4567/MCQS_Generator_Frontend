@@ -118,13 +118,13 @@ function App() {
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Enter Quiz Type</h2>
+            <h2 className="text-xl font-semibold mb-4">Enter Quiz Topic</h2>
             <input
               type="text"
               value={inputValue}
               onChange={handleInputChange}
               className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg"
-              placeholder="Enter quiz type..."
+              placeholder="For example, Harry Potter"
             />
             <button
               onClick={handleSubmit}
