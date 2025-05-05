@@ -90,7 +90,7 @@ function App() {
       {showModal && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Enter Quiz Type</h2>
+            <h2 className="text-xl font-semibold mb-4">Enter Quiz Topic</h2>
             <input
               type="text"
               value={inputValue}
@@ -171,7 +171,7 @@ function App() {
       {/* Footer */}
       <footer className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-600">© 2024 MCQS Generator Platform. All rights reserved.</p>
+          <p className="text-gray-600">© 2025 MCQS Generator Platform. All rights reserved.</p>
         </div>
       </footer>
     </div>
