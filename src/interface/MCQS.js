@@ -212,7 +212,7 @@ function App() {
       {/* Footer */}
       <footer className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-600">© 2024 Quiz Generator Platform. All rights reserved.</p>
+          <p className="text-gray-600">© 2025 Quiz Generator Platform. All rights reserved.</p>
         </div>
       </footer>
    
