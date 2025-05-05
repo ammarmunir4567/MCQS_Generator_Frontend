@@ -47,7 +47,7 @@ function TestInputPage() {
 
       <footer className="bg-white shadow-md">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-600">© 2024 Interview Platform. All rights reserved.</p>
+          <p className="text-gray-600">© 2025 Interview Platform. All rights reserved.</p>
         </div>
       </footer>
     </div>
