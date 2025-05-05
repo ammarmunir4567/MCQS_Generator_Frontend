@@ -96,7 +96,7 @@ function App() {
               value={inputValue}
               onChange={handleInputChange}
               className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-lg"
-              placeholder="Enter quiz type..."
+              placeholder="For example , Harry Potter"
             />
             <button
               onClick={handleSubmit}
